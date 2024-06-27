@@ -2,7 +2,7 @@
   "name": "light-html-i18n",
   "displayName": "light-html-i18n",
   "description": "",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -14,7 +14,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.toI8n",
+        "command": "extension.toI18n",
         "title": "Convert to i18n"
       },
       {
@@ -38,6 +38,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "google-translate-api": "^2.3.0"
+    "axios": "^1.7.2",
+    "jsdom": "^24.1.0"
   }
 }

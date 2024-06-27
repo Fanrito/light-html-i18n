@@ -29,3 +29,8 @@ json生成的位置和名称：由用户在vscode的配置文件settings.json中
 则fin.json中会出现
 "汉字123": "汉字123"
 然后原本的<span>汉字123</span> 会被替换为 <span>{{ $t('fin.汉字123') }}</span>
+
+4. 使用方法
+首先在settings.json中配置i18nFilePath
+然后在需要国家化的页面中，按ctrl+shift+p换出vscode的命令面板，输入toI18n，选择Convert to i18n即可。
+可以为该命令添加自己喜欢的快捷键。
