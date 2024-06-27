@@ -1,0 +1,43 @@
+{
+  "name": "light-html-i18n",
+  "displayName": "light-html-i18n",
+  "description": "",
+  "version": "0.0.2",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.toI8n",
+        "title": "Convert to i18n"
+      },
+      {
+        "command": "extension.configureI18n",
+        "title": "Configure i18n File"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.90.0",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "google-translate-api": "^2.3.0"
+  }
+}
