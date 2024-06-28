@@ -3,7 +3,9 @@ const path = require('path');
 const main = require('./src/main.js');
 const fs = require('fs');
 
-const CONFIG_KEY = 'i18nFilePath';
+const CONFIG_KEY_CN = 'i18nFilePath_cn';
+const CONFIG_KEY_EN = 'i18nFilePath_en';
+
 
 function activate(context) {
     let disposable = vscode.commands.registerCommand('extension.toI18n', async function () {
@@ -13,8 +15,10 @@ function activate(context) {
         const document = editor.document;
         const workspaceEdit = new vscode.WorkspaceEdit();
 
-        const configPath = vscode.workspace.getConfiguration().get(CONFIG_KEY);
-        if (!configPath) {
+        const configPath_cn = vscode.workspace.getConfiguration().get(CONFIG_KEY_CN);
+        const configPath_en = vscode.workspace.getConfiguration().get(CONFIG_KEY_EN);
+
+        if (!configPath_cn || !configPath_en) {
             vscode.window.showErrorMessage('Please configure the i18n file path.');
             return;
         }
@@ -25,33 +29,27 @@ function activate(context) {
             return;
         }
 
-        const jsonFilePath = path.join(rootPath, configPath);
-        try {
-            const i18nData = await main.loadJsonFile(jsonFilePath);
+        const jsonFilePath_cn = path.join(rootPath, configPath_cn);
+        const jsonFilePath_en = path.join(rootPath, configPath_en);
 
-            await main.processDocument(document, jsonFilePath, i18nData, workspaceEdit);
+        try {
+            const i18nData_cn = await main.loadJsonFile(jsonFilePath_cn);
+            const i18nData_en = await main.loadJsonFile(jsonFilePath_en);
+
+            await main.processDocument(document, jsonFilePath_cn, i18nData_cn, i18nData_en, workspaceEdit);
 
             await vscode.workspace.applyEdit(workspaceEdit);
 
-            fs.writeFileSync(jsonFilePath, JSON.stringify(i18nData, null, 2));
+            fs.writeFileSync(jsonFilePath_cn, JSON.stringify(i18nData_cn, null, 2));
+            fs.writeFileSync(jsonFilePath_en, JSON.stringify(i18nData_en, null, 2));
+
             vscode.window.showInformationMessage('Text has been converted to i18n keys.');
         } catch (error) {
             vscode.window.showErrorMessage(`Error processing i18n: ${error.message}`);
         }
     });
 
-    let configureCommand = vscode.commands.registerCommand('extension.configureI18n', async function () {
-        const i18nFilePath = await vscode.window.showInputBox({
-            prompt: 'Please enter the i18n JSON file path relative to the workspace root',
-            placeHolder: 'i18n/messages.json'
-        });
-        if (i18nFilePath) {
-            await vscode.workspace.getConfiguration().update(CONFIG_KEY, i18nFilePath, vscode.ConfigurationTarget.Global);
-            vscode.window.showInformationMessage(`i18n file path set to: ${i18nFilePath}`);
-        }
-    });
-
-    context.subscriptions.push(disposable, configureCommand);
+    context.subscriptions.push(disposable);
 }
 
 function deactivate() {}
